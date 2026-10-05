@@ -1,0 +1,1167 @@
+```html
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>LeadHunter — Leads Reais</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    :root {
+      --bg: #070910;
+      --panel: #0d111a;
+      --panel-2: #111621;
+      --border: #242d42;
+      --text: #f6f7fb;
+      --muted: #9aa6ba;
+      --purple: #7c5cff;
+      --purple-dark: #6244e8;
+      --green: #62dfa0;
+      --green-bg: #10281d;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family:
+        Inter,
+        ui-sans-serif,
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(
+          circle at 15% 0%,
+          #202b55 0,
+          transparent 30%
+        ),
+        var(--bg);
+    }
+
+    button,
+    input,
+    select {
+      font: inherit;
+    }
+
+    .app {
+      width: min(1400px, 100%);
+      margin: auto;
+      padding: 28px;
+    }
+
+    /* HEADER */
+
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      margin-bottom: 28px;
+    }
+
+    .logo {
+      font-size: 25px;
+      font-weight: 900;
+      letter-spacing: -1px;
+    }
+
+    .logo span {
+      color: var(--purple);
+    }
+
+    .real-badge {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      border: 1px solid #27314a;
+      background: #0e1320;
+      padding: 8px 13px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 800;
+      color: #aeb9cd;
+      letter-spacing: .4px;
+    }
+
+    .real-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #43d98b;
+      box-shadow: 0 0 12px #43d98b;
+    }
+
+    /* HERO */
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      padding: 38px;
+      border-radius: 26px;
+      border: 1px solid var(--border);
+      background:
+        linear-gradient(
+          135deg,
+          rgba(22,28,45,.98),
+          rgba(10,13,22,.98)
+        );
+      box-shadow: 0 30px 100px rgba(0,0,0,.35);
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      width: 280px;
+      height: 280px;
+      right: -100px;
+      top: -120px;
+      border-radius: 50%;
+      background: var(--purple);
+      opacity: .09;
+      filter: blur(30px);
+      pointer-events: none;
+    }
+
+    .hero h1 {
+      position: relative;
+      z-index: 2;
+      margin: 0;
+      font-size: clamp(32px, 5vw, 56px);
+      line-height: 1;
+      letter-spacing: -2px;
+    }
+
+    .hero p {
+      position: relative;
+      z-index: 2;
+      color: var(--muted);
+      max-width: 700px;
+      line-height: 1.6;
+      margin: 16px 0 28px;
+    }
+
+    /* FORM */
+
+    .form {
+      position: relative;
+      z-index: 2;
+      display: grid;
+      grid-template-columns: 1.4fr 1fr .6fr auto;
+      gap: 10px;
+    }
+
+    input,
+    select {
+      width: 100%;
+      height: 52px;
+      border-radius: 13px;
+      border: 1px solid #29334a;
+      outline: none;
+      background: #080b12;
+      color: white;
+      padding: 0 15px;
+      font-size: 14px;
+      transition: .2s;
+    }
+
+    input::placeholder {
+      color: #647086;
+    }
+
+    input:focus,
+    select:focus {
+      border-color: var(--purple);
+      box-shadow: 0 0 0 3px #7c5cff20;
+    }
+
+    button {
+      height: 52px;
+      padding: 0 22px;
+      border: none;
+      border-radius: 13px;
+      background: var(--purple);
+      color: white;
+      font-weight: 850;
+      cursor: pointer;
+      transition: .2s;
+      white-space: nowrap;
+    }
+
+    button:hover {
+      transform: translateY(-1px);
+      filter: brightness(1.08);
+    }
+
+    button:active {
+      transform: translateY(0);
+    }
+
+    button:disabled {
+      opacity: .6;
+      cursor: wait;
+      transform: none;
+    }
+
+    .filter {
+      position: relative;
+      z-index: 2;
+      margin-top: 15px;
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      color: #aeb8c9;
+      font-size: 13px;
+      cursor: pointer;
+    }
+
+    .filter input {
+      width: auto;
+      height: auto;
+      accent-color: var(--purple);
+      cursor: pointer;
+    }
+
+    /* STATUS */
+
+    .status {
+      min-height: 26px;
+      margin: 22px 2px;
+      color: #a8b3c7;
+      font-size: 14px;
+    }
+
+    .status strong {
+      color: white;
+    }
+
+    .status.loading {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: #c7cde0;
+    }
+
+    .spinner {
+      width: 16px;
+      height: 16px;
+      border: 2px solid #30394f;
+      border-top-color: var(--purple);
+      border-radius: 50%;
+      animation: spin .7s linear infinite;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    /* RESULTS */
+
+    .results {
+      display: grid;
+      grid-template-columns: repeat(
+        auto-fill,
+        minmax(320px, 1fr)
+      );
+      gap: 15px;
+    }
+
+    /* CARD */
+
+    .card {
+      min-height: 290px;
+      display: flex;
+      flex-direction: column;
+      padding: 20px;
+      border-radius: 19px;
+      border: 1px solid #202a3e;
+      background:
+        linear-gradient(
+          145deg,
+          var(--panel-2),
+          var(--panel)
+        );
+      transition: .2s;
+    }
+
+    .card:hover {
+      transform: translateY(-3px);
+      border-color: #34405d;
+      box-shadow: 0 20px 45px rgba(0,0,0,.22);
+    }
+
+    .card-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 15px;
+    }
+
+    .company {
+      font-size: 19px;
+      font-weight: 800;
+      line-height: 1.2;
+      word-break: break-word;
+    }
+
+    .category {
+      display: inline-block;
+      margin-top: 7px;
+      padding: 5px 8px;
+      border-radius: 7px;
+      background: #1b2232;
+      color: #b6c1d4;
+      font-size: 10px;
+      font-weight: 750;
+      text-transform: uppercase;
+    }
+
+    .opportunity {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 6px 8px;
+      border-radius: 8px;
+      background: var(--green-bg);
+      color: var(--green);
+      font-size: 10px;
+      font-weight: 850;
+      white-space: nowrap;
+    }
+
+    .has-site {
+      background: #171d2b;
+      color: #8f9bb0;
+    }
+
+    /* INFO */
+
+    .info {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 5px;
+    }
+
+    .info-line {
+      display: flex;
+      gap: 9px;
+      color: #aab4c5;
+      font-size: 13px;
+      line-height: 1.4;
+      word-break: break-word;
+    }
+
+    .icon {
+      width: 20px;
+      flex: 0 0 20px;
+      text-align: center;
+    }
+
+    /* ACTIONS */
+
+    .actions {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+      margin-top: auto;
+      padding-top: 20px;
+    }
+
+    .actions a {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 40px;
+      padding: 0 10px;
+      border-radius: 10px;
+      text-decoration: none;
+      background: #171d29;
+      color: white;
+      font-size: 12px;
+      font-weight: 750;
+      border: 1px solid #242d40;
+      transition: .2s;
+    }
+
+    .actions a:hover {
+      background: #20283a;
+      border-color: #35415a;
+    }
+
+    .actions .primary {
+      background: var(--purple);
+      border-color: var(--purple);
+    }
+
+    .actions .primary:hover {
+      background: var(--purple-dark);
+    }
+
+    /* EMPTY */
+
+    .empty {
+      grid-column: 1 / -1;
+      padding: 70px 20px;
+      text-align: center;
+      border-radius: 20px;
+      border: 1px dashed #2b354b;
+      color: #7f8a9e;
+    }
+
+    .empty strong {
+      color: #dce2ef;
+    }
+
+    /* FOOTER */
+
+    .footer {
+      margin-top: 25px;
+      text-align: center;
+      color: #69758a;
+      font-size: 11px;
+      line-height: 1.6;
+    }
+
+    /* RESPONSIVE */
+
+    @media (max-width: 850px) {
+      .app {
+        padding: 16px;
+      }
+
+      .header {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      .hero {
+        padding: 25px;
+      }
+
+      .form {
+        grid-template-columns: 1fr;
+      }
+
+      .results {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="app">
+
+    <header class="header">
+
+      <div class="logo">
+        Lead<span>Hunter</span>
+      </div>
+
+      <div class="real-badge">
+        <span class="real-dot"></span>
+        DADOS REAIS
+      </div>
+
+    </header>
+
+
+    <section class="hero">
+
+      <h1>
+        Encontre empresas reais.
+      </h1>
+
+      <p>
+        Pesquise empresas por ramo e região,
+        encontre oportunidades comerciais e
+        identifique negócios que não possuem
+        site cadastrado.
+      </p>
+
+
+      <div class="form">
+
+        <input
+          id="category"
+          type="text"
+          value="barbearia"
+          placeholder="Ramo: barbearia, dentista, restaurante..."
+          autocomplete="off"
+        >
+
+        <input
+          id="city"
+          type="text"
+          value="Juiz de Fora, MG"
+          placeholder="Cidade"
+          autocomplete="off"
+        >
+
+        <select id="radius">
+
+          <option value="3000">
+            3 km
+          </option>
+
+          <option value="5000">
+            5 km
+          </option>
+
+          <option value="10000">
+            10 km
+          </option>
+
+          <option value="15000" selected>
+            15 km
+          </option>
+
+          <option value="30000">
+            30 km
+          </option>
+
+          <option value="50000">
+            50 km
+          </option>
+
+        </select>
+
+        <button
+          id="searchButton"
+          type="button"
+        >
+          Buscar empresas
+        </button>
+
+      </div>
+
+
+      <label class="filter">
+
+        <input
+          id="onlyNoSite"
+          type="checkbox"
+        >
+
+        Mostrar somente empresas sem site
+
+      </label>
+
+    </section>
+
+
+    <div
+      id="status"
+      class="status"
+    >
+      Pronto para pesquisar.
+    </div>
+
+
+    <section
+      id="results"
+      class="results"
+    >
+
+      <div class="empty">
+        Digite um ramo e uma cidade
+        para começar a busca.
+      </div>
+
+    </section>
+
+
+    <footer class="footer">
+
+      Os dados são provenientes de fontes públicas.
+      Informações como telefone, site e Instagram
+      só aparecem quando estão disponíveis no cadastro.
+
+    </footer>
+
+  </div>
+
+
+  <script>
+    "use strict";
+
+    /*
+    ============================================================
+    ELEMENTOS
+    ============================================================
+    */
+
+    const categoryInput =
+      document.getElementById("category");
+
+    const cityInput =
+      document.getElementById("city");
+
+    const radiusInput =
+      document.getElementById("radius");
+
+    const onlyNoSite =
+      document.getElementById("onlyNoSite");
+
+    const searchButton =
+      document.getElementById("searchButton");
+
+    const status =
+      document.getElementById("status");
+
+    const results =
+      document.getElementById("results");
+
+
+    /*
+    ============================================================
+    SEGURANÇA
+    ============================================================
+    */
+
+    function escapeHTML(value) {
+
+      return String(value ?? "")
+        .replace(
+          /[&<>"']/g,
+          character => {
+
+            const entities = {
+              "&": "&amp;",
+              "<": "&lt;",
+              ">": "&gt;",
+              '"': "&quot;",
+              "'": "&#039;"
+            };
+
+            return entities[character];
+          }
+        );
+    }
+
+
+    /*
+    ============================================================
+    URL SEGURA
+    ============================================================
+    */
+
+    function safeURL(url) {
+
+      if (!url) {
+        return "";
+      }
+
+      try {
+
+        const parsed =
+          new URL(url);
+
+        if (
+          parsed.protocol === "http:" ||
+          parsed.protocol === "https:"
+        ) {
+
+          return parsed.href;
+        }
+
+      } catch (_) {}
+
+      return "";
+    }
+
+
+    /*
+    ============================================================
+    CARD
+    ============================================================
+    */
+
+    function createCard(lead) {
+
+      const website =
+        safeURL(lead.website);
+
+      const maps =
+        safeURL(lead.maps);
+
+
+      const websiteButton =
+        website
+          ? `
+            <a
+              href="${escapeHTML(website)}"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              🌐 Site
+            </a>
+          `
+          : "";
+
+
+      const mapsButton =
+        maps
+          ? `
+            <a
+              class="primary"
+              href="${escapeHTML(maps)}"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              📍 Ver no Maps
+            </a>
+          `
+          : "";
+
+
+      const phone =
+        lead.phone
+          ? `
+            <div class="info-line">
+              <span class="icon">📞</span>
+              <span>
+                ${escapeHTML(lead.phone)}
+              </span>
+            </div>
+          `
+          : `
+            <div class="info-line">
+              <span class="icon">📞</span>
+              <span>
+                Telefone não informado
+              </span>
+            </div>
+          `;
+
+
+      const email =
+        lead.email
+          ? `
+            <div class="info-line">
+              <span class="icon">✉️</span>
+              <span>
+                ${escapeHTML(lead.email)}
+              </span>
+            </div>
+          `
+          : "";
+
+
+      const instagram =
+        lead.instagram
+          ? `
+            <div class="info-line">
+              <span class="icon">📸</span>
+              <span>
+                ${escapeHTML(lead.instagram)}
+              </span>
+            </div>
+          `
+          : "";
+
+
+      const websiteStatus =
+        lead.hasWebsite
+          ? `
+            <span class="opportunity has-site">
+              ✓ COM SITE
+            </span>
+          `
+          : `
+            <span class="opportunity">
+              🔥 SEM SITE
+            </span>
+          `;
+
+
+      return `
+        <article class="card">
+
+          <div class="card-top">
+
+            <div>
+
+              <div class="company">
+                ${escapeHTML(lead.name)}
+              </div>
+
+              <span class="category">
+                ${escapeHTML(lead.category || "Empresa")}
+              </span>
+
+            </div>
+
+            ${websiteStatus}
+
+          </div>
+
+
+          <div class="info">
+
+            <div class="info-line">
+
+              <span class="icon">
+                📍
+              </span>
+
+              <span>
+                ${escapeHTML(
+                  lead.address ||
+                  "Endereço não informado"
+                )}
+              </span>
+
+            </div>
+
+            ${phone}
+
+            ${email}
+
+            ${instagram}
+
+          </div>
+
+
+          <div class="actions">
+
+            ${mapsButton}
+
+            ${websiteButton}
+
+          </div>
+
+        </article>
+      `;
+    }
+
+
+    /*
+    ============================================================
+    STATUS
+    ============================================================
+    */
+
+    function setLoading() {
+
+      status.className =
+        "status loading";
+
+      status.innerHTML = `
+        <span class="spinner"></span>
+        Consultando empresas reais...
+      `;
+    }
+
+
+    function setError(message) {
+
+      status.className =
+        "status";
+
+      status.innerHTML =
+        "Não foi possível realizar a busca.";
+
+      results.innerHTML = `
+        <div class="empty">
+
+          <strong>
+            Erro na pesquisa
+          </strong>
+
+          <br><br>
+
+          ${escapeHTML(message)}
+
+          <br><br>
+
+          Tente novamente em alguns segundos.
+
+        </div>
+      `;
+    }
+
+
+    /*
+    ============================================================
+    BUSCA
+    ============================================================
+    */
+
+    async function searchLeads() {
+
+      const category =
+        categoryInput.value.trim();
+
+      const city =
+        cityInput.value.trim();
+
+      const radius =
+        radiusInput.value;
+
+      if (!category) {
+
+        alert(
+          "Digite o ramo da empresa."
+        );
+
+        categoryInput.focus();
+
+        return;
+      }
+
+
+      if (!city) {
+
+        alert(
+          "Digite a cidade."
+        );
+
+        cityInput.focus();
+
+        return;
+      }
+
+
+      searchButton.disabled =
+        true;
+
+      searchButton.textContent =
+        "Buscando...";
+
+
+      setLoading();
+
+      results.innerHTML = "";
+
+
+      try {
+
+        const params =
+          new URLSearchParams();
+
+        params.set(
+          "category",
+          category
+        );
+
+        params.set(
+          "city",
+          city
+        );
+
+        params.set(
+          "radius",
+          radius
+        );
+
+        params.set(
+          "onlyNoSite",
+          onlyNoSite.checked
+        );
+
+
+        const response =
+          await fetch(
+            "/api/leads?" +
+            params.toString(),
+            {
+              method: "GET",
+              headers: {
+                "Accept": "application/json"
+              },
+              cache: "no-store"
+            }
+          );
+
+
+        const contentType =
+          response.headers.get(
+            "content-type"
+          ) || "";
+
+
+        if (!contentType.includes(
+          "application/json"
+        )) {
+
+          throw new Error(
+            "O servidor não retornou JSON. Verifique se o server.js está funcionando."
+          );
+        }
+
+
+        const data =
+          await response.json();
+
+
+        if (!response.ok) {
+
+          throw new Error(
+            data.error ||
+            "O servidor encontrou um erro."
+          );
+        }
+
+
+        status.className =
+          "status";
+
+
+        status.innerHTML = `
+          <strong>
+            ${Number(data.total) || 0}
+          </strong>
+
+          empresa(s) encontrada(s)
+          para
+
+          <strong>
+            ${escapeHTML(data.category)}
+          </strong>
+
+          em
+
+          <strong>
+            ${escapeHTML(data.city)}
+          </strong>
+        `;
+
+
+        if (
+          !Array.isArray(data.leads) ||
+          data.leads.length === 0
+        ) {
+
+          results.innerHTML = `
+            <div class="empty">
+
+              <strong>
+                Nenhuma empresa encontrada.
+              </strong>
+
+              <br><br>
+
+              Tente aumentar o raio
+              ou pesquisar outro termo.
+
+            </div>
+          `;
+
+          return;
+        }
+
+
+        results.innerHTML =
+          data.leads
+            .map(createCard)
+            .join("");
+
+
+        results.scrollIntoView({
+          behavior: "smooth",
+          block: "start"
+        });
+
+
+      } catch (error) {
+
+        console.error(
+          "LeadHunter:",
+          error
+        );
+
+        setError(
+          error.message ||
+          "Erro desconhecido."
+        );
+
+      } finally {
+
+        searchButton.disabled =
+          false;
+
+        searchButton.textContent =
+          "Buscar empresas";
+
+      }
+    }
+
+
+    /*
+    ============================================================
+    EVENTOS
+    ============================================================
+    */
+
+    searchButton.addEventListener(
+      "click",
+      searchLeads
+    );
+
+
+    categoryInput.addEventListener(
+      "keydown",
+      event => {
+
+        if (
+          event.key === "Enter"
+        ) {
+
+          event.preventDefault();
+
+          searchLeads();
+        }
+      }
+    );
+
+
+    cityInput.addEventListener(
+      "keydown",
+      event => {
+
+        if (
+          event.key === "Enter"
+        ) {
+
+          event.preventDefault();
+
+          searchLeads();
+        }
+      }
+    );
+
+
+    /*
+    ============================================================
+    TESTE INICIAL
+    ============================================================
+    */
+
+    console.log(
+      "LeadHunter carregado corretamente."
+    );
+
+  </script>
+
+</body>
+</html>
+```
